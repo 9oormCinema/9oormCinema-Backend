@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: "9oormCinema-Backend"
+  profiles:
+    active: dev
+    include: secret

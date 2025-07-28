@@ -1,10 +1,46 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="UTF-8" />
+    <title>후기 작성</title>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+          const form = document.getElementById('review-form');
+          const eventId = new URLSearchParams(window.location.search).get('event_id');
+
+          form.addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const rating = form.rating.value;
+            const comment = form.comment.value;
+
+            const res = await fetch(`/events/${eventId}/reviews`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer JWT_TOKEN'  // 실제 JWT로 교체 필요
+              },
+              body: JSON.stringify({ rating, comment })
+            });
+
+            const data = await res.json();
+            alert('작성 완료: ' + data.review.comment);
+          });
+        });
+    </script>
 </head>
 <body>
-$END$
+<h3>후기 작성</h3>
+<form id="review-form">
+    <label for="rating">별점:</label>
+    <select id="rating" name="rating">
+        <option value="5">⭐️⭐️⭐️⭐️⭐️</option>
+        <option value="4">⭐️⭐️⭐️⭐️</option>
+        <option value="3">⭐️⭐️⭐️</option>
+        <option value="2">⭐️⭐️</option>
+        <option value="1">⭐️</option>
+    </select><br/>
+    <textarea id="comment" name="comment" placeholder="후기를 입력하세요"></textarea><br/>
+    <button type="submit">등록</button>
+</form>
 </body>
 </html>

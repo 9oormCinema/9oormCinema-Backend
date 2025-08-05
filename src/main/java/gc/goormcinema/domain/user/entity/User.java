@@ -1,22 +1,19 @@
 package gc.goormcinema.domain.user.entity;
 
 import gc.goormcinema.domain.user.dto.UserDTO;
-import gc.goormcinema.global.common.entity.BaseTimeEntity;
+import gc.goormcinema.global.common.base.BaseEntity;
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Entity
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @DynamicUpdate
 @Setter
 @Table(name = "users")
-public class User extends BaseTimeEntity {
+public class User extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -50,6 +47,7 @@ public class User extends BaseTimeEntity {
                 String name, String phone, UserRole role,
                 Boolean isSocial,
                 String refreshToken) {
+
         this.email = email;
         this.password = password;
         this.name = name;
@@ -73,5 +71,13 @@ public class User extends BaseTimeEntity {
         this.phone = user.getPhone();
 
         return this;
+    }
+
+    public boolean isAdmin() {
+        return this.role == UserRole.ADMIN;
+    }
+
+    public boolean isSocialUser() {
+        return this.isSocial;
     }
 }

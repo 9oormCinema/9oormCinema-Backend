@@ -4,107 +4,37 @@
   <meta charset="UTF-8" />
   <title>공연 상세</title>
   <link rel="stylesheet" href="style.css">
-  <style>
-    body {
-      font-family: sans-serif;
-      padding: 30px;
-      max-width: 800px;
-      margin: auto;
-      background-color: #f7f8fa;
-      color: #333;
-    }
-    .poster {
-      width: 100%;
-      max-width: 400px;
-      margin-bottom: 20px;
-      border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
-    .details p {
-      margin: 6px 0;
-      font-size: 16px;
-    }
-    .btn-group {
-      margin-top: 20px;
-    }
-    .btn-group a {
-      display: inline-block;
-      margin-right: 10px;
-      padding: 10px 20px;
-      background-color: #3366ff;
-      color: white;
-      text-decoration: none;
-      border-radius: 4px;
-      transition: background-color 0.2s;
-      cursor: pointer;
-    }
-    .btn-group a:hover {
-      background-color: #003ccc;
-    }
-  </style>
-</head>
-<body>
-<img id="poster" class="poster" />
-<h1 id="title">공연 제목</h1>
-<div class="details">
-  <p id="venue">공연장: </p>
-  <p id="location">위치: </p>
-  <p id="start-time">시작 시간: </p>
-  <p id="end-time">종료 시간: </p>
-  <p id="fee">요금: </p>
-  <p id="avg-rating">평점: </p>
-  <p id="hits">누적 관객: </p>
-  <p id="created-at">등록일: </p>
-</div>
+  <script>
+    document.addEventListener('DOMContentLoaded', async function () {
+      const urlParams = new URLSearchParams(window.location.search);
+      const eventId = urlParams.get('event_id');
 
-<div class="btn-group">
-  <a id="seat-link">좌석 예매하기</a>
-  <a id="review-read-link">후기 보기</a>
-  <a id="review-write-link">후기 작성</a>
-</div>
-
-<script>
-  (async () => {
-    const params = new URLSearchParams(location.search);
-    const eventId = params.get('event_id');
-    if (!eventId) {
-      return alert("잘못된 접근입니다.");
-    }
-
-    try {
-      // ★ 여기를 '/event-detail?event_id=…' 로 변경
-      const res   = await fetch(`/event-detail?event_id=${eventId}`);
-      if (!res.ok) throw new Error(res.status);
+      const res = await fetch(`/events/${eventId}`);
       const event = await res.json();
 
-      document.getElementById('poster').src              = event.posterUrl;
-      document.getElementById('title').textContent       = event.title;
-      document.getElementById('venue').textContent      += event.venue.name;
-      document.getElementById('location').textContent   += event.venue.address;
-      document.getElementById('start-time').textContent += event.startsAt;
-      document.getElementById('end-time').textContent   += event.endsAt;
-      document.getElementById('fee').textContent        += event.fee + "원";
-      document.getElementById('avg-rating').textContent += event.avgRating;
-      document.getElementById('hits').textContent       += event.hits;
-      document.getElementById('created-at').textContent += event.createdAt;
+      document.getElementById('poster').src = event.poster_url;
+      document.getElementById('title').textContent = event.title;
+      document.getElementById('description').textContent = event.description;
+      document.getElementById('cast').textContent += event.cast_summary;
+      document.getElementById('venue').textContent += event.venue.name;
+      document.getElementById('avg-rating').textContent += event.avg_rating;
+      document.getElementById('trailer-iframe').src = event.trailer_url;
 
-      document.getElementById('seat-link').onclick = () => {
-        location.href = `seats.html?event_id=${eventId}`;
-      };
-      document.getElementById('review-read-link').onclick = e => {
-        e.preventDefault();
-        location.href = `reviews.html?event_id=${eventId}`;
-      };
-      document.getElementById('review-write-link').onclick = e => {
-        e.preventDefault();
-        window.open(`review-modal.html?event_id=${eventId}`, '_blank');
-      };
-
-    } catch (err) {
-      console.error(err);
-      alert("공연 정보를 불러오는 데 실패했습니다.");
-    }
-  })();
-</script>
+      document.getElementById('seat-link').href = `seats.html?schedule_id=1`; // 스케줄 아이디 예시
+    });
+  </script>
+</head>
+<body>
+<img id="poster" />
+<h1 id="title"></h1>
+<p id="description"></p>
+<p id="cast">출연진: </p>
+<p id="venue">장소: </p>
+<p id="avg-rating">평점: </p>
+<iframe id="trailer-iframe" width="560" height="315" frameborder="0" allowfullscreen></iframe>
+<br/>
+<a id="seat-link">좌석 예매하기</a>
+<br/><br/>
+<a href="review-modal.html?event_id=1">후기 작성</a>
 </body>
 </html>

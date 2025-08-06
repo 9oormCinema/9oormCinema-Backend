@@ -1,7 +1,7 @@
 package gc.goormcinema.domain.user.controller;
 
 
-import gc.goormcinema.domain.auth.PrincipalDetails;
+//import gc.goormcinema.domain.auth.PrincipalDetails;
 import gc.goormcinema.domain.user.dto.UserDTO;
 import gc.goormcinema.domain.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
     private final UserService userService;
 
+    /*
     @Operation(summary = "마이페이지 조회")
     @GetMapping("/me")
     public ResponseEntity<UserDTO.UserInfoResponse> getUserInfo(@AuthenticationPrincipal PrincipalDetails principalDetails) {
@@ -36,4 +37,5 @@ public class UserController {
         userService.updateUser(principalDetails.getId(), request);
         return ResponseEntity.ok().build();
     }
+     */
 }

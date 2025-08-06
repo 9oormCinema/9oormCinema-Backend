@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class UserService {
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+    //private final PasswordEncoder passwordEncoder;
 
     public UserDTO.UserInfoResponse getUserInfo(long userId) {
         User user = userRepository.findById(userId)
@@ -50,7 +50,7 @@ public class UserService {
                 .orElseThrow(UserNotFoundException::new);
 
         user.setPassword(password);
-        user.passwordEncode(passwordEncoder);
+        //user.passwordEncode(passwordEncoder);
 
         userRepository.save(user);
     }

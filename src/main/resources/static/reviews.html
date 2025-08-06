@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <title>공연 후기</title>
+    <style>
+        body {
+          font-family: 'Arial', sans-serif;
+          margin: 20px;
+          background-color: #f7f7f7;
+        }
+
+        h1 {
+          color: #333;
+          text-align: center;
+        }
+
+        .review-card {
+          background-color: white;
+          border: 1px solid #ddd;
+          border-radius: 8px;
+          padding: 16px;
+          margin: 10px auto;
+          width: 80%;
+          box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .review-header {
+          display: flex;
+          justify-content: space-between;
+          font-weight: bold;
+          color: #444;
+        }
+
+        .review-content {
+          margin-top: 10px;
+          font-size: 15px;
+          color: #555;
+        }
+
+        .back-button {
+          display: block;
+          margin: 30px auto 0;
+          padding: 10px 20px;
+          background-color: #3366ff;
+          color: white;
+          text-decoration: none;
+          border-radius: 6px;
+          text-align: center;
+          width: fit-content;
+        }
+
+        .back-button:hover {
+          background-color: #254eda;
+        }
+    </style>
+</head>
+<body>
+<h1>공연 후기 목록</h1>
+<div id="review-list"></div>
+<a href="javascript:window.history.back();" class="back-button">뒤로 가기</a>
+
+<script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const eventId = urlParams.get('event_id');
+
+      try {
+        const res = await fetch(`/reviews?event_id=${eventId}`);
+        const data = await res.json();
+
+        const container = document.getElementById('review-list');
+
+        if (!Array.isArray(data) || data.length === 0) {
+          container.innerHTML = '<p style="text-align:center; color:gray;">등록된 후기가 없습니다.</p>';
+          return;
+        }
+
+        data.forEach(review => {
+          const card = document.createElement('div');
+          card.className = 'review-card';
+
+          card.innerHTML = `
+            <div class="review-header">
+              <span>작성자: ${review.username}</span>
+              <span>평점: ⭐️ ${review.score}</span>
+            </div>
+            <div class="review-content">
+              ${review.content}
+            </div>
+          `;
+
+          container.appendChild(card);
+        });
+      } catch (err) {
+        console.error("후기 불러오기 실패:", err);
+        document.getElementById('review-list').innerHTML = '<p style="color:red; text-align:center;">후기를 불러오는 데 실패했습니다.</p>';
+      }
+    });
+</script>
+</body>
+</html>

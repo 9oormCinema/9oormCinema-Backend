@@ -10,20 +10,33 @@
 
           form.addEventListener('submit', async function (e) {
             e.preventDefault();
-            const rating = form.rating.value;
+
+            const rating = Number(form.rating.value);
             const comment = form.comment.value;
 
-            const res = await fetch(`/events/${eventId}/reviews`, {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer JWT_TOKEN'  // 실제 JWT로 교체 필요
-              },
-              body: JSON.stringify({ rating, comment })
-            });
+            try {
+              const res = await fetch(`/events/${eventId}/reviews`, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                  userId: 2,      // 테스트용 userId = 1 고정
+                  rating: rating,
+                  comment: comment
+                })
+              });
 
-            const data = await res.json();
-            alert('작성 완료: ' + data.review.comment);
+              if (!res.ok) {
+                throw new Error(await res.text());
+              }
+
+              const data = await res.json();
+              alert('작성 완료: ' + data.review.comment);
+            } catch (err) {
+              console.error(err);
+              alert('후기 작성에 실패했습니다: ' + err.message);
+            }
           });
         });
     </script>

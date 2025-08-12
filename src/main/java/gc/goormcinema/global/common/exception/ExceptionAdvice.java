@@ -1,5 +1,6 @@
 package gc.goormcinema.global.common.exception;
 
+import gc.goormcinema.domain.user.error.UserAlreadyExistException;
 import gc.goormcinema.global.common.base.BaseResponse;
 import gc.goormcinema.global.common.exception.code.BaseCodeDto;
 import gc.goormcinema.global.common.exception.code.status.GlobalErrorStatus;
@@ -98,5 +99,19 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
         return ResponseEntity
                 .status(errorCode.getHttpStatus().value())
                 .body(BaseResponse.onFailure(errorCode.getCode(), errorCode.getMessage(), errorPoint));
+    }
+
+    /**
+     * UserAlreadyExistException 발생 시 예외 처리
+     * 회원가입 시 이미 존재하는 이메일로 인증을 시도할 때 발생합니다.
+     */
+    @ExceptionHandler(value = UserAlreadyExistException.class)
+    public ResponseEntity<BaseResponse<String>> handleUserAlreadyExistException(UserAlreadyExistException e) {
+        // 에러 메시지를 포함한 로그만 출력하고, 스택 트레이스는 출력하지 않습니다.
+        log.info("[AUTH] : 이미 존재하는 회원입니다. {}", e.getMessage());
+
+        // 미리 정의된 USER_ALREADY_EXIST 에러 코드를 사용하여 응답을 생성합니다.
+        BaseCodeDto errorCode = GlobalErrorStatus.USER_ALREADY_EXIST.getCode();
+        return handleExceptionInternal(errorCode);
     }
 }

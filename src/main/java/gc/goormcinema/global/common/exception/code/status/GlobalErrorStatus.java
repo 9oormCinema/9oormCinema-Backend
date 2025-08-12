@@ -27,6 +27,12 @@ public enum GlobalErrorStatus implements BaseCodeInterface {
 
     // For test
     TEMP_EXCEPTION(HttpStatus.BAD_REQUEST, "TEMP4001", "예외처리 테스트입니다."),
+
+    //USER
+    USER_NOT_FOUND(HttpStatus.NOT_FOUND, "U01","존재하지 않는 회원입니다."),
+    USER_ACCESS_DENIED(HttpStatus.UNAUTHORIZED, "USER401", "접근이 거부되었습니다."),
+    USER_ALREADY_EXIST(HttpStatus.BAD_REQUEST, "U03", "이미 존재하는 회원입니다."),
+    WRONG_PASSWORD(HttpStatus.BAD_REQUEST, "USER401", "비밀번호를 확인해주세요."),
     ;
 
     private final HttpStatus httpStatus;

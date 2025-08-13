@@ -1,7 +1,6 @@
 package gc.goormcinema.domain.auth.jwt.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import gc.goormcinema.global.common.ErrorResponse;
 import gc.goormcinema.global.common.base.BaseResponse;
 import gc.goormcinema.global.common.exception.code.BaseCodeDto;
 import gc.goormcinema.global.common.exception.code.status.GlobalErrorStatus;
@@ -9,9 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 
 import java.io.IOException;
